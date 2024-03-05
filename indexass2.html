@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="style2.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .display {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="display">
+        <span id="time">00:00</span>
+    </div>
+    <div class="controls">
+        <button id="start">Start</button>
+        <button id="pause">Pause</button>
+        <button id="reset">Reset</button>
+    </div>
+    <script>
+        let startTime, elapsedTime = 0, interval;
+        const timeDisplay = document.getElementById("time");
+        const startButton = document.getElementById("start");
+        const pauseButton = document.getElementById("pause");
+        const resetButton = document.getElementById("reset");
+
+        function start() {
+            startTime = Date.now() - elapsedTime;
+            interval = setInterval(updateTime, 10);
+            startButton.disabled = true;
+            pauseButton.disabled = false;
+            resetButton.disabled = false;
+        }
+
+        function pause() {
+            clearInterval(interval);
+            elapsedTime = Date.now() - startTime;
+            startButton.disabled = false;
+            pauseButton.disabled = true;
+        }
+
+        function reset() {
+            clearInterval(interval);
+            elapsedTime = 0;
+            timeDisplay.textContent = "00:00";
+            startButton.disabled = false;
+            pauseButton.disabled = true;
+            resetButton.disabled = true;
+        }
+
+        function updateTime() {
+            elapsedTime = Date.now() - startTime;
+            const minutes = Math.floor(elapsedTime / 60000);
+            const seconds = Math.floor((elapsedTime % 60000) / 1000);
+            timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        startButton.addEventListener("click", start);
+        pauseButton.addEventListener("click", pause);
+        resetButton.addEventListener("click", reset);
+    </script>
+</body>
+</html>
